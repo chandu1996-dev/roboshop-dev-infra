@@ -1,6 +1,6 @@
 module "vpc" {
     # source = "../terraform-aws-vpc"
-    source = "git::https://github.com/chandu1996-dev/terraform-aws-vpc.git"
+    source = "git::https://github.com/chandu1996-dev/terraform-aws-vpc.git?ref=main"
 
 
     #vpc
