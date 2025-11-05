@@ -27,7 +27,7 @@ resource "terraform_data" "catalogue" {
     type     = "ssh"
     user     = "ec2-user"
     password = "DevOps321"
-    host     = aws_instance.redis.private_ip
+    host     = aws_instance.catalogue.private_ip
   }
 
   # terraform copies this file to catalogue server
