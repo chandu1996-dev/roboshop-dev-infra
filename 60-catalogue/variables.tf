@@ -9,3 +9,6 @@ variable "environment" {
     default = "dev"
   
 }
+variable "domain_name" {
+    default = "born96.fun"
+}
