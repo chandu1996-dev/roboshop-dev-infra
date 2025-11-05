@@ -166,6 +166,7 @@ resource "terraform_data" "mysql" {
   }
 }
 
+#route53 records
 
 resource "aws_route53_record" "mongodb" {
   zone_id = var.zone_id
