@@ -6,6 +6,10 @@ resource "aws_instance" "catalogue" {
     vpc_security_group_ids = [local.catalogue_sg_id]
     subnet_id = local.private_subnet_id
     
+    root_block_device {
+        volume_size = 50
+        volume_type = "gp3" # or "gp2", depending on your preference
+    }
     tags = merge (
         local.common_tags,
         {

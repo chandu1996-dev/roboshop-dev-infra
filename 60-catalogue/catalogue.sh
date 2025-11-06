@@ -2,6 +2,12 @@
 
 component=$1
 environment=$2
+
+# growing the /home volume for terraform purpose
+growpart /dev/nvme0n1 4
+lvextend -L +30G /dev/mapper/RootVG-homeVol
+xfs_growfs /home
+
 dnf install ansible -y
 # ansible-pull -U https://github.com/chandu1996-dev/ansible-roboshop-roles-tf.git -e component=$component main.yaml
 
