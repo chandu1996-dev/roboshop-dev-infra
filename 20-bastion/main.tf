@@ -6,10 +6,10 @@ resource "aws_instance" "bastion" {
     iam_instance_profile = aws_iam_instance_profile.bastion.name
 
      # need more for terraform
-    # root_block_device {
-    #     volume_size = 50
-    #     volume_type = "gp3" # or "gp2", depending on your preference
-    # }
+    root_block_device {
+        volume_size = 50
+        volume_type = "gp3" # or "gp2", depending on your preference
+    }
 
     user_data=file("bastion.sh")
 
