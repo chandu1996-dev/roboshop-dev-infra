@@ -5,7 +5,7 @@ resource "aws_instance" "catalogue" {
     instance_type = "t3.micro"
     vpc_security_group_ids = [local.catalogue_sg_id]
     subnet_id = local.private_subnet_id
-    
+
     root_block_device {
         volume_size = 50
         volume_type = "gp3" # or "gp2", depending on your preference
@@ -49,45 +49,45 @@ resource "terraform_data" "catalogue" {
   }
 }
 
-# # stop the instance to take image
-# resource "aws_ec2_instance_state" "catalogue" {
-#   instance_id = aws_instance.catalogue.id
-#   state       = "stopped"
-#   depends_on = [terraform_data.catalogue]  #means-> frst intance need to create after stop the instance 
-# }
+# stop the instance to take image
+resource "aws_ec2_instance_state" "catalogue" {
+  instance_id = aws_instance.catalogue.id
+  state       = "stopped"
+  depends_on = [terraform_data.catalogue]  #means-> frst intance need to create after stop the instance 
+}
 
-# resource "aws_ami_from_instance" "catalogue" {
-#   name               = "${local.common_name_suffix}-catalogue-ami"
-#   source_instance_id = aws_instance.catalogue.id
-#   depends_on = [aws_ec2_instance_state.catalogue]
-#   tags = merge (
-#         local.common_tags,
-#         {
-#             Name = "${local.common_name_suffix}-catalogue-ami" # roboshop-dev-mongodb
-#         }
-#   )
-# }
+resource "aws_ami_from_instance" "catalogue" {
+  name               = "${local.common_name_suffix}-catalogue-ami"
+  source_instance_id = aws_instance.catalogue.id
+  depends_on = [aws_ec2_instance_state.catalogue]
+  tags = merge (
+        local.common_tags,
+        {
+            Name = "${local.common_name_suffix}-catalogue-ami" # roboshop-dev-mongodb
+        }
+  )
+}
 
-# #creating target group
+#creating target group
 
-# resource "aws_lb_target_group" "catalogue" {
-#   name     = "${local.common_name_suffix}-catalogue"
-#   port     = 8080
-#   protocol = "HTTP"
-#   vpc_id   = local.vpc_id
-#   deregistration_delay = 60 # waiting period before deleting the instance
+resource "aws_lb_target_group" "catalogue" {
+  name     = "${local.common_name_suffix}-catalogue"
+  port     = 8080
+  protocol = "HTTP"
+  vpc_id   = local.vpc_id
+  deregistration_delay = 60 # waiting period before deleting the instance
 
-#   health_check {
-#     healthy_threshold = 2
-#     interval = 10
-#     matcher = "200-299"
-#     path = "/health"
-#     port = 8080
-#     protocol = "HTTP"
-#     timeout = 2
-#     unhealthy_threshold = 2
-#   }
-# }
+  health_check {
+    healthy_threshold = 2
+    interval = 10
+    matcher = "200-299"
+    path = "/health"
+    port = 8080
+    protocol = "HTTP"
+    timeout = 2
+    unhealthy_threshold = 2
+  }
+}
 
 # #creating Launch template
 
